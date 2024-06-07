@@ -5,5 +5,4 @@ app = Flask(__name__)
 def hello_world():
     return "Hello World"
 
-
 from controller import user_controller
