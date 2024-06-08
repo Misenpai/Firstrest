@@ -1,8 +1,9 @@
-import mysql.connector
 from flask import make_response
 from datetime import datetime,timedelta
 import jwt
 from config.config import dbconfig
+import psycopg2
+from psycopg2.extras import RealDictCursor
 
 
 class user_model():
@@ -10,9 +11,9 @@ class user_model():
     def __init__(self):
 
         try:
-            self.conn = mysql.connector.connect(host=dbconfig['host'],user = dbconfig['username'], password = dbconfig['password'], database = dbconfig['database'])
+            self.conn = psycopg2.connect(host=dbconfig['host'],user = dbconfig['username'], password = dbconfig['password'], database = dbconfig['database'],port = dbconfig['port'])
             self.conn.autocommit = True
-            self.curr = self.conn.cursor(dictionary=True)
+            self.curr = self.conn.cursor(cursor_factory=RealDictCursor)
             print("Succussfully Connected")
         except:
             print("Connection Error")

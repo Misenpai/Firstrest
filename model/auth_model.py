@@ -1,16 +1,17 @@
 from logging import exception
-import mysql.connector
 import jwt
 from flask import make_response, request, json
 import re
 from functools import wraps
 from config.config import dbconfig
+import psycopg2
+from psycopg2.extras import RealDictCursor
 class auth_model():
 
     def __init__(self):
-        self.conn = mysql.connector.connect(host=dbconfig['host'],user = dbconfig['username'], password = dbconfig['password'], database = dbconfig['database'])
-        self.conn.autocommit=True
-        self.curr = self.conn.cursor(dictionary=True)
+        self.conn = psycopg2.connect(host=dbconfig['host'],user = dbconfig['username'], password = dbconfig['password'], database = dbconfig['database'],port = dbconfig['port'])
+        self.conn.autocommit = True
+        self.curr = self.conn.cursor(cursor_factory=RealDictCursor)
 
     def token_auth(self, endpoint):
         def inner1(func):
